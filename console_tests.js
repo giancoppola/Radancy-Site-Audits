@@ -15,12 +15,28 @@ const SiteAuditTests = () => {
         pass: h1Tags.length > 0
     }
 
+    const ogImage = document.querySelector('meta[property="og:image"]');
+    const ogImageTest = {
+        criteria: "Meta OG Image tag present and has content",
+        rawData: ogImage,
+        data: ogImage != null ? ogImage.getAttribute('content') : null,
+        pass: ogImage != null && ogImage.hasAttribute('content') && ogImage.getAttribute('content').length > 0
+    }
+
     const ogTitle = document.querySelector('meta[property="og:title"]');
     const ogTitleTest = {
         criteria: "Meta OG Title tag present and has content",
         rawData: ogTitle,
         data: ogTitle != null ? ogTitle.getAttribute('content') : null,
         pass: ogTitle != null && ogTitle.hasAttribute('content') && ogTitle.getAttribute('content').length > 0
+    }
+
+    const twitterImage = document.querySelector('meta[name="twitter:image"]');
+    const twitterImageTest = {
+        criteria: "Meta Twitter Title tag present and has content",
+        rawData: twitterImage,
+        data: twitterImage != null ? twitterImage.getAttribute('content') : null,
+        pass: twitterImage != null && twitterImage.hasAttribute('content') && twitterImage.getAttribute('content').length > 0
     }
 
     const twitterTitle = document.querySelector('meta[name="twitter:title"]');
@@ -56,7 +72,7 @@ const SiteAuditTests = () => {
     }
 
     // Add all tests to this array
-    const AllTests = [h1TagsTest, ogTitleTest, twitterTitleTest, titleTagTest, metaDescriptionTest, imagesWithoutAltTest];
+    const AllTests = [h1TagsTest, ogImageTest, ogTitleTest, twitterImageTest, twitterTitleTest, titleTagTest, metaDescriptionTest, imagesWithoutAltTest];
     for (let test of AllTests) {
         test.pass ? PassMessage(test.criteria) : FailMessage(test.criteria);
     }
@@ -64,7 +80,9 @@ const SiteAuditTests = () => {
     return {
         fullResults: {
             h1TagsTest,
+            ogImageTest,
             ogTitleTest,
+            twitterImageTest,
             twitterTitleTest,
             metaDescriptionTest,
             titleTagTest,
