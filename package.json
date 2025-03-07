@@ -1,0 +1,19 @@
+{
+  "name": "SiteAudit",
+  "version": "1.0.0",
+  "description": "",
+  "main": "console_tests.js",
+  "scripts": {
+    "dev": "npx tsc && node selenium_tests.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "private": true,
+  "dependencies": {
+    "@types/selenium-webdriver": "^4.1.28",
+    "mocha": "11.1.0",
+    "selenium-webdriver": "^4.29.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.2"
+  }
+}
