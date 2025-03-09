@@ -1,4 +1,4 @@
-import {driver, websiteToTest} from "../automated_test_modules/_start-parameters";
+import {driver, websiteToTest} from "../start-parameters";
 import {By, WebElement} from "selenium-webdriver";
 
 // let siteLinks = await driver.findElements(By.css("a"));
