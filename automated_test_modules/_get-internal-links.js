@@ -9,8 +9,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = GetInternalLinks;
-function GetInternalLinks(siteLinks) {
+exports.default = _getInternalLinks;
+function _getInternalLinks(siteLinks) {
     return __awaiter(this, void 0, void 0, function* () {
         let internalLinks = [];
         yield Promise.all(siteLinks.map((link) => __awaiter(this, void 0, void 0, function* () {
