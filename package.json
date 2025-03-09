@@ -4,14 +4,18 @@
   "description": "",
   "main": "console_tests.js",
   "scripts": {
-    "dev": "npx tsc && node selenium_tests.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "private": true,
   "dependencies": {
+    "@babel/preset-env": "^7.26.9",
+    "@types/jest": "^29.5.14",
     "@types/selenium-webdriver": "^4.1.28",
-    "mocha": "11.1.0",
-    "selenium-webdriver": "^4.29.0"
+    "babel-jest": "^29.7.0",
+    "jest": "^29.7.0",
+    "selenium-webdriver": "^4.29.0",
+    "ts-jest": "^29.2.6",
+    "ts-node": "^10.9.2"
   },
   "devDependencies": {
     "typescript": "^5.8.2"
