@@ -11,6 +11,12 @@ export let TestResults: iTestResults = {};
 // Selenium WebDriver that will be used in the tests
 export let driver: ThenableWebDriver;
 
+// Set how long for Jest to wait for each test to complete,
+// setting at 5 minutes due to nature of testing
+const secondInMilliseconds = 1000;
+export const jestTimeout = 300 * secondInMilliseconds;
+jest.setTimeout(jestTimeout);
+
 // Setup before all jest tests start
 beforeAll(async () => {
 
@@ -33,7 +39,7 @@ beforeAll(async () => {
 
     await driver.manage().setTimeouts({implicit: 500});
 
-}, 50000)
+}, jestTimeout)
 
 // Fires after all jest tests have finished
 afterAll(async () => {
@@ -43,4 +49,4 @@ afterAll(async () => {
     }
     await fs.writeFileSync(path.join(resultsDir, 'test_results.json'), JSON.stringify(TestResults, null, "\t"));
     await driver.quit();
-})
+}, jestTimeout)

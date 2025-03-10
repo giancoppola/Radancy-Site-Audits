@@ -1,13 +1,20 @@
-import {WebElement} from "selenium-webdriver";
+import {By, ThenableWebDriver, WebElement} from "selenium-webdriver";
+import {pagesToTest, websiteToTest} from "../test-parameters";
 
-export default async function GetInternalLinks(siteLinks: WebElement[]): Promise<string[]> {
-    let internalLinks: string[] = [];
-    await Promise.all(siteLinks.map( async (link) => {
-        let href = await link.getAttribute('href');
-        let isInternalLink = href.startsWith("https://careers.questdiagnostics.com/") || href.startsWith("/");
-        if (href && isInternalLink) {
-            internalLinks.push(href);
+export default async function GetInternalLinks(driver: ThenableWebDriver): Promise<string[]> {
+    let linksToTest: string[] = [websiteToTest];
+    await Promise.all(pagesToTest.map(async (page) => {
+        linksToTest.push(websiteToTest + page);
+    }))
+    await driver.get(websiteToTest);
+    let aTags = await driver.findElements(By.css("a"));
+    await Promise.all(aTags.map(async (a) => {
+        let link = await a.getAttribute("href");
+        let internalLink = link.startsWith("/") || link.startsWith(websiteToTest) || link.startsWith(websiteToTest);
+        if (link && internalLink) {
+            linksToTest.push(link);
         }
     }))
-    return internalLinks;
+    console.log(linksToTest);
+    return linksToTest;
 }
