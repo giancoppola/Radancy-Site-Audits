@@ -2,3 +2,4 @@
 * Run npm install
 * Configure your site parameters in the test-parameters.ts file
 * Run npm test
+* Results will be shown in the terminal, along with a JSON in /automated_test_results/test_results.json

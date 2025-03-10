@@ -37,6 +37,10 @@ beforeAll(async () => {
 
 // Fires after all jest tests have finished
 afterAll(async () => {
-    await fs.writeFileSync(path.join(__dirname, '..', 'automated_test_results', 'test_results.json'), JSON.stringify(TestResults, null, "\t"));
+    const resultsDir = path.join(__dirname, '..', 'automated_test_results');
+    if (!fs.existsSync(resultsDir)){
+        await fs.mkdirSync(resultsDir, { recursive: true });
+    }
+    await fs.writeFileSync(path.join(resultsDir, 'test_results.json'), JSON.stringify(TestResults, null, "\t"));
     await driver.quit();
 })
