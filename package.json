@@ -1,23 +1,23 @@
 {
-  "name": "SiteAudit",
+  "name": "Radancy Site Audits",
   "version": "1.0.0",
-  "description": "",
+  "description": "Automating Radancy site audits",
   "main": "console_tests.js",
   "scripts": {
-    "test": "jest"
+    "test": "mocha automated_tests/**/*.spec.ts --recursive --timeout 300000 --exit"
   },
   "private": true,
   "dependencies": {
-    "@babel/preset-env": "^7.26.9",
-    "@types/jest": "^29.5.14",
+    "@types/chai": "^5.2.0",
+    "@types/mocha": "^10.0.10",
     "@types/selenium-webdriver": "^4.1.28",
-    "babel-jest": "^29.7.0",
-    "jest": "^29.7.0",
+    "chai": "^5.2.0",
+    "mocha": "^11.1.0",
     "selenium-webdriver": "^4.29.0",
-    "ts-jest": "^29.2.6",
     "ts-node": "^10.9.2"
   },
   "devDependencies": {
+    "tsx": "^4.19.3",
     "typescript": "^5.8.2"
   }
 }

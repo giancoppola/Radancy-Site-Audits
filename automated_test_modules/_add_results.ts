@@ -1,9 +1,10 @@
-import {TestResults} from "./_jest-global-setup";
+import {TestResults} from "./_global-setup";
 
 export const AddH1TagsResults = (url: string, pass: boolean, length: number, values: string[]) => {
-    TestResults[url] = TestResults[url] || {};
-    TestResults[url]["h1Tags"] = TestResults[url]["h1Tags"] || {};
-    TestResults[url]["h1Tags"] = {
+    let link = (" " + url).slice(1);
+    TestResults[link] = TestResults[link] || {};
+    TestResults[link]["h1Tags"] = TestResults[link]["h1Tags"] || {};
+    TestResults[link]["h1Tags"] = {
         pass: pass,
         number: length,
         values: values
