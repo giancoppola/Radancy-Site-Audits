@@ -143,3 +143,4 @@ dist
 
 # Jest
 coverage/
+automated_test_results/

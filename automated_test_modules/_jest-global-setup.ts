@@ -1,20 +1,16 @@
 import Chrome from "selenium-webdriver/chrome";
 import {Browser, Builder, By, ThenableWebDriver} from "selenium-webdriver";
+import {iTestResults} from "./_types";
+import * as path from "node:path";
 const {getBinaryPaths} = require("selenium-webdriver/common/driverFinder");
-import GetInternalLinks from "./automated_test_modules/_get-internal-links";
+const fs = require("fs");
 
-// Careers site you want to test, this should be the homepage of the site
-export const websiteToTest: string = "https://careers.questdiagnostics.com/";
+// Test results object
+export let TestResults: iTestResults = {};
 
-// Array of core pages to test, the automated tests will also
-// add internal pages linked on the site, but you can add here
-// to be certain they will be tested
-export const pagesToTest: string[] = [
-    "/search-jobs",
-    "/sitemap",
-];
-
+// Selenium WebDriver that will be used in the tests
 export let driver: ThenableWebDriver;
+
 // Setup before all jest tests start
 beforeAll(async () => {
 
@@ -38,7 +34,9 @@ beforeAll(async () => {
     await driver.manage().setTimeouts({implicit: 500});
 
 }, 50000)
+
 // Fires after all jest tests have finished
 afterAll(async () => {
+    await fs.writeFileSync(path.join(__dirname, '..', 'automated_test_results', 'test_results.json'), JSON.stringify(TestResults, null, "\t"));
     await driver.quit();
 })
