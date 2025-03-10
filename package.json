@@ -2,7 +2,7 @@
   "name": "Radancy Site Audits",
   "version": "1.0.0",
   "description": "Automating Radancy site audits",
-  "main": "console_tests.js",
+  "main": "manual_tests/console_tests.js",
   "scripts": {
     "test": "mocha automated_tests/**/*.spec.ts --recursive --timeout 300000 --exit"
   },

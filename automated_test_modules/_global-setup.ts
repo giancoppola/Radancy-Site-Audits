@@ -6,7 +6,7 @@ import GetInternalLinks from "./_get-internal-links";
 const {getBinaryPaths} = require("selenium-webdriver/common/driverFinder");
 const fs = require("fs");
 import { log } from "console";
-import {websiteToTest} from "../test-parameters";
+import {websiteToTest} from "./_test-parameters";
 import {before} from "mocha";
 
 // Test results object

@@ -1,5 +1,5 @@
 import {By, ThenableWebDriver, WebElement} from "selenium-webdriver";
-import {pagesToTest, websiteToTest} from "../test-parameters";
+import {pagesToTest, websiteToTest} from "./_test-parameters";
 
 
 export default async function GetInternalLinks(driver: ThenableWebDriver): Promise<string[]> {
