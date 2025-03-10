@@ -143,4 +143,4 @@ dist
 
 # Jest
 coverage/
-automated_test_results/test_results.json
+test_results.json
