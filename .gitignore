@@ -141,6 +141,7 @@ dist
 # SvelteKit build / generate output
 .svelte-kit
 
-# Jest
-coverage/
+# Testing
+links_to_test.json
+test_results.html
 test_results.json

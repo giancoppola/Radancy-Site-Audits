@@ -18,18 +18,17 @@ describe("H1 Tags Test", () => {
             it(link, async () => {
                 await driver.get(link);
                 let h1Tags: WebElement[] = await driver.findElements(By.css('h1'));
-                expect(h1Tags).not.to.be.null;
-                expect(h1Tags.length).to.be.greaterThan(0);
-                let url = await driver.getCurrentUrl();
                 let values: string[] = [];
                 for(let h1Tag of h1Tags) {
                     let value = await h1Tag.getText();
                     value ? values.push(value) : null;
-                    expect(value).not.to.be.null;
                 };
                 let pass = h1Tags.length > 0 && values.length > 0;
-                let resultsLink = (" " + url).slice(1);
-                AddH1TagsResults(resultsLink, pass, h1Tags.length, values);
+                AddH1TagsResults(link, pass, h1Tags.length, values);
+                expect(h1Tags).not.to.be.null;
+                expect(h1Tags.length).to.be.greaterThan(0);
+                expect(values).not.to.be.null;
+                expect(values.length).to.be.greaterThan(0);
             })
         }
     })

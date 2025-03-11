@@ -18,18 +18,17 @@ describe("Meta Description Test", () => {
             it(link, async () => {
                 await driver.get(link);
                 let metaDescriptionTags: WebElement[] = await driver.findElements(By.css('meta[name="description"]'));
-                expect(metaDescriptionTags).not.to.be.null;
-                expect(metaDescriptionTags.length).to.be.equal(1);
-                let url = await driver.getCurrentUrl();
                 let values: string[] = [];
                 for(let tag of metaDescriptionTags) {
                     let value = await tag.getAttribute("content");
                     value ? values.push(value) : null;
-                    expect(value).not.to.be.null;
                 };
                 let pass = metaDescriptionTags.length === 1 && values.length > 0;
-                let resultsLink = (" " + url).slice(1);
-                AddMetaDescriptionTagResults(resultsLink, pass, metaDescriptionTags.length, values);
+                AddMetaDescriptionTagResults(link, pass, metaDescriptionTags.length, values);
+                expect(metaDescriptionTags).not.to.be.null;
+                expect(metaDescriptionTags.length).to.be.equal(1);
+                expect(values).not.to.be.null;
+                expect(values.length).to.be.greaterThan(0);
             })
         }
     })

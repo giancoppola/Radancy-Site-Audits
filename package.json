@@ -4,7 +4,7 @@
   "description": "Automating Radancy site audits",
   "main": "manual_tests/console_tests.js",
   "scripts": {
-    "test": "ts-node automated_test_modules/_pre-test-setup.ts && mocha automated_tests/**/*.spec.ts --recursive --timeout 0"
+    "test": "ts-node automated_test_modules/_pre-test-setup.ts && mocha automated_tests/**/*.spec.ts --recursive --timeout 0 --reporter mocha-simple-html-reporter --reporter-options output=automated_test_results/test_results.html"
   },
   "private": true,
   "dependencies": {
@@ -17,6 +17,7 @@
     "ts-node": "^10.9.2"
   },
   "devDependencies": {
+    "mocha-simple-html-reporter": "^2.0.0",
     "tsx": "^4.19.3",
     "typescript": "^5.8.2"
   }
