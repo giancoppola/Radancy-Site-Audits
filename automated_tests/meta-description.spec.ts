@@ -25,10 +25,11 @@ describe("Meta Description Test", () => {
                 };
                 let pass = metaDescriptionTags.length === 1 && values.length > 0;
                 AddMetaDescriptionTagResults(link, pass, metaDescriptionTags.length, values);
-                expect(metaDescriptionTags).not.to.be.null;
-                expect(metaDescriptionTags.length).to.be.equal(1);
-                expect(values).not.to.be.null;
-                expect(values.length).to.be.greaterThan(0);
+                expect(metaDescriptionTags, "No meta description tag").not.to.be.null;
+                expect(metaDescriptionTags.length, "No meta description tag").to.be.greaterThan(0);
+                expect(metaDescriptionTags.length, "Too many meta description tags").to.be.lessThan(2);
+                expect(values, "No meta description tag value").not.to.be.null;
+                expect(values.length, "No meta description tag value").to.be.greaterThan(0);
             })
         }
     })

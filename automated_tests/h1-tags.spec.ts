@@ -25,10 +25,10 @@ describe("H1 Tags Test", () => {
                 };
                 let pass = h1Tags.length > 0 && values.length > 0;
                 AddH1TagsResults(link, pass, h1Tags.length, values);
-                expect(h1Tags).not.to.be.null;
-                expect(h1Tags.length).to.be.greaterThan(0);
-                expect(values).not.to.be.null;
-                expect(values.length).to.be.greaterThan(0);
+                expect(h1Tags, "No H1 tag").not.to.be.null;
+                expect(h1Tags.length, "No H1 tag").to.be.greaterThan(0);
+                expect(values, "No H1 tag value").not.to.be.null;
+                expect(values.length, "No H1 tag value").to.be.greaterThan(0);
             })
         }
     })

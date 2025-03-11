@@ -22,13 +22,14 @@ describe("OG Image Test", () => {
                 for(let tag of ogImageTags) {
                     let value = await tag.getAttribute("content");
                     value ? values.push(value) : null;
-                };
+                }
                 let pass = ogImageTags.length === 1 && values.length > 0;
                 AddOgImageTagResults(link, pass, ogImageTags.length, values);
-                expect(ogImageTags, link).not.to.be.null;
-                expect(ogImageTags.length).to.be.equal(1);
-                expect(values).not.to.be.null;
-                expect(ogImageTags.length).to.be.greaterThan(0);
+                expect(ogImageTags, "No og:image tag").not.to.be.null;
+                expect(ogImageTags.length, "No og:image tag").to.be.greaterThan(0);
+                expect(ogImageTags.length, "Too many og:image tags").to.be.lessThan(2);
+                expect(values, "No og:image tag value").not.to.be.null;
+                expect(values.length, "No og:image tag value").to.be.greaterThan(0);
             })
         }
     })
