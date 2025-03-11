@@ -1,4 +1,4 @@
-import {driver, MochaCleanup, MochaSetup} from "../automated_test_modules/_global-setup";
+import {driver, MochaCleanup, MochaSetup} from "../automated_test_setup/_global-setup";
 import {By, WebElement} from "selenium-webdriver";
 import {AddOgImageTagResults} from "../automated_test_modules/_add_results";
 import {expect} from 'chai';

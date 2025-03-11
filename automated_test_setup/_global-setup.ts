@@ -2,8 +2,6 @@ import Chrome from "selenium-webdriver/chrome";
 import {Browser, Builder, By, ThenableWebDriver} from "selenium-webdriver";
 import {iTestResults} from "./_types";
 import * as path from "node:path";
-import GetInternalLinks from "./_get-internal-links";
-import {Done} from "mocha";
 const {getBinaryPaths} = require("selenium-webdriver/common/driverFinder");
 const fs = require("fs");
 
@@ -13,7 +11,7 @@ export let TestResults: iTestResults = {};
 // Selenium WebDriver that will be used in the tests
 export let driver: ThenableWebDriver;
 
-// Setup before all jest tests start
+// Setup before all tests start
 export async function MochaSetup() {
 
     let options = new Chrome.Options();
@@ -36,7 +34,7 @@ export async function MochaSetup() {
     await driver.manage().setTimeouts({implicit: 500});
 }
 
-// Fires after all jest tests have finished
+// Fires after all tests have finished
 export async function MochaCleanup() {
     const resultsDir = path.join(__dirname, '..', 'automated_test_results');
     if (!fs.existsSync(resultsDir)){

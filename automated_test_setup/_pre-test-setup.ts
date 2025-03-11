@@ -2,12 +2,13 @@ import path from "node:path";
 import fs from "fs";
 import Chrome from "selenium-webdriver/chrome";
 import {Browser, Builder} from "selenium-webdriver";
-import GetInternalLinks from "./_get-internal-links";
+import GetInternalLinks from "../automated_test_modules/_get-internal-links";
 const {getBinaryPaths} = require("selenium-webdriver/common/driverFinder");
 
+// Runs before the actual tests run, currently this is to
+// build a list of links that we want to test
 const PreTestSetup = async () => {
     console.log("PTS: ", "Running pre test setup steps");
-
     try {
         const setupDir = path.join(__dirname, '..', 'automated_test_setup');
         if (!fs.existsSync(setupDir)){

@@ -1,4 +1,4 @@
-import {TestResults} from "./_global-setup";
+import {TestResults} from "../automated_test_setup/_global-setup";
 
 export const AddH1TagsResults = (url: string, pass: boolean, length: number, values: string[]) => {
     TestResults[url] = TestResults[url] || {};
