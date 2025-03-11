@@ -4,7 +4,7 @@
   "description": "Automating Radancy site audits",
   "main": "manual_tests/console_tests.js",
   "scripts": {
-    "test": "mocha automated_tests/**/*.spec.ts --recursive --timeout 300000 --exit"
+    "test": "ts-node automated_test_modules/_pre-test-setup.ts && mocha automated_tests/**/*.spec.ts --recursive --timeout 0"
   },
   "private": true,
   "dependencies": {

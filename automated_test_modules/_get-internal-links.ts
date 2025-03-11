@@ -1,4 +1,4 @@
-import {By, ThenableWebDriver, WebElement} from "selenium-webdriver";
+import {By, ThenableWebDriver, until, WebElement} from "selenium-webdriver";
 import {pagesToTest, websiteToTest} from "./_test-parameters";
 
 
@@ -8,6 +8,7 @@ export default async function GetInternalLinks(driver: ThenableWebDriver): Promi
         linksToTest.push(websiteToTest + page);
     }
     await driver.get(websiteToTest);
+    await driver.wait(until.elementsLocated(By.css("a")));
     let aTags = await driver.findElements(By.css("a"));
     for (let a of aTags) {
         let link = await a.getAttribute("href");

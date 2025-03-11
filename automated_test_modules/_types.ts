@@ -7,4 +7,14 @@ export interface iURLTestResults {
         number: number;
         values: string[];
     }
+    metaDescriptionTag: {
+        pass: boolean;
+        number: number;
+        values: string[];
+    }
+    ogImageTag: {
+        pass: boolean;
+        number: number;
+        values: string[];
+    }
 }
