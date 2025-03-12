@@ -69,6 +69,32 @@ describe("Image Test", () => {
                 // expect(imagesWithoutAlt.length, "No og:title tag value").to.be.greaterThan(0);
                 expect(imagesWithoutTransparency.length, `The following images are PNG format but have no transparency - ${JSON.stringify(imagesWithoutTransparency)}`).to.equal(0);
             })
+            it("each image on page should be under 800kb", async () => {
+                await driver.get(link);
+                let imgTags: WebElement[] = await driver.findElements(By.css('img[src$=".png"]'));
+                let imagesToOptimise: string[] = [];
+                for(let img of imgTags) {
+                    try {
+                        const imgSrc = await img.getAttribute('src');
+                        const response = await fetch(imgSrc);
+                        const imgBuffer = await response.arrayBuffer();
+                        const sizeInKb = imgBuffer.byteLength / 1000;
+                        const maxSizeInKb = 800;
+                        sizeInKb > maxSizeInKb ? imagesToOptimise.push(imgSrc) : null;
+                    }
+                    catch(err) {
+                        console.error(err);
+                    }
+                }
+                // let pass = imgTags.length === 1 && imagesWithoutAlt.length > 0;
+                // AddOgTitleTagResults(link, pass, imgTags.length, imagesWithoutAlt);
+                // expect(imgTags, "No og:title tag").not.to.be.null;
+                // expect(imgTags.length, "No og:title tag").to.be.greaterThan(0);
+                // expect(imgTags.length, "Too many og:title tags").to.be.lessThan(2);
+                // expect(imagesWithoutAlt, "No og:title tag value").not.to.be.null;
+                // expect(imagesWithoutAlt.length, "No og:title tag value").to.be.greaterThan(0);
+                expect(imagesToOptimise.length, `The following images are over 800kb and may need optimisation - ${JSON.stringify(imagesToOptimise)}`).to.equal(0);
+            })
         })
     }
 })
