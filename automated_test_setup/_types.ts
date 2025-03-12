@@ -4,17 +4,22 @@ export interface iTestResults {
 export interface iURLTestResults {
     h1Tags: {
         pass: boolean;
-        number: number;
-        values: string[];
+        noOfTags: number;
+        tagValues: string[];
     }
     metaDescriptionTag: {
         pass: boolean;
-        number: number;
-        values: string[];
+        noOfTags: number;
+        tagValues: string[];
     }
     ogImageTag: {
         pass: boolean;
-        number: number;
-        values: string[];
+        noOfTags: number;
+        tagValues: string[];
+    }
+    ogTitleTag: {
+        pass: boolean;
+        noOfTags: number;
+        tagValues: string[];
     }
 }

@@ -14,9 +14,7 @@
     "chai": "^5.2.0",
     "mocha": "^11.1.0",
     "selenium-webdriver": "^4.29.0",
-    "ts-node": "^10.9.2"
-  },
-  "devDependencies": {
+    "ts-node": "^10.9.2",
     "mocha-simple-html-reporter": "^2.0.0",
     "tsx": "^4.19.3",
     "typescript": "^5.8.2"

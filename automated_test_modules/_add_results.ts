@@ -5,8 +5,8 @@ export const AddH1TagsResults = (url: string, pass: boolean, length: number, val
     TestResults[url]["h1Tags"] = TestResults[url]["h1Tags"] || {};
     TestResults[url]["h1Tags"] = {
         pass: pass,
-        number: length,
-        values: values
+        noOfTags: length,
+        tagValues: values
     }
 }
 
@@ -15,8 +15,8 @@ export const AddMetaDescriptionTagResults = (url: string, pass: boolean, length:
     TestResults[url]["metaDescriptionTag"] = TestResults[url]["metaDescriptionTag"] || {};
     TestResults[url]["metaDescriptionTag"] = {
         pass: pass,
-        number: length,
-        values: values
+        noOfTags: length,
+        tagValues: values
     }
 }
 
@@ -25,7 +25,17 @@ export const AddOgImageTagResults = (url: string, pass: boolean, length: number,
     TestResults[url]["ogImageTag"] = TestResults[url]["ogImageTag"] || {};
     TestResults[url]["ogImageTag"] = {
         pass: pass,
-        number: length,
-        values: values
+        noOfTags: length,
+        tagValues: values
+    }
+}
+
+export const AddOgTitleTagResults = (url: string, pass: boolean, length: number, values: string[]) => {
+    TestResults[url] = TestResults[url] || {};
+    TestResults[url]["ogTitleTag"] = TestResults[url]["ogTitleTag"] || {};
+    TestResults[url]["ogTitleTag"] = {
+        pass: pass,
+        noOfTags: length,
+        tagValues: values
     }
 }
