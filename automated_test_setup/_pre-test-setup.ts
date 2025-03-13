@@ -8,7 +8,7 @@ const {getBinaryPaths} = require("selenium-webdriver/common/driverFinder");
 // Runs before the actual tests run, currently this is to
 // build a list of links that we want to test
 const PreTestSetup = async () => {
-    console.log("PTS: ", "Running pre test setup steps");
+    console.log("PTS: Running pre test setup steps");
     try {
         const setupDir = path.join(__dirname, '..', 'automated_test_setup');
         if (!fs.existsSync(setupDir)){
@@ -37,11 +37,12 @@ const PreTestSetup = async () => {
         let linksToTest = await GetInternalLinks(driver);
         fs.writeFileSync(path.join(setupDir, 'links_to_test.json'), JSON.stringify(linksToTest));
         await driver.quit();
-        console.log("PTS: ", "Successfully completed pre test setup steps");
+        console.log("PTS: Successfully completed pre test setup steps");
     }
     catch (e) {
-        console.log("PTS: ", `Error in pre test setup steps - ${(e as Error).message}`);
+        console.log(`PTS: Error in pre test setup steps - ${(e as Error).message}`);
     }
+    console.log("PTS: Now starting tests")
 }
 PreTestSetup();
 

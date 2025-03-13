@@ -88,7 +88,7 @@ describe("Image Test", () => {
                         const imgBuffer = await response.arrayBuffer();
                         const sizeInKb = imgBuffer.byteLength / 1000;
                         const maxSizeInKb = 800;
-                        sizeInKb > maxSizeInKb ? imagesToOptimise.push(imgSrc) : null;
+                        sizeInKb > maxSizeInKb ? imagesToOptimise.push(`${imgSrc} - ${sizeInKb}kb`) : null;
                     }
                     catch(err) {
                         console.error(err);
