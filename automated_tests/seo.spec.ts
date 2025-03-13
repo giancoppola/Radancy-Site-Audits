@@ -40,6 +40,27 @@ describe("SEO Test", () => {
                 expect(values, "No H1 tag value").not.to.be.null;
                 expect(values.length, "No H1 tag value").to.be.greaterThan(0);
             })
+            it("should have one title tag, and should contain content", async function() {
+                const selector = 'title';
+                await driver.get(link);
+                const titleTags: WebElement[] = await driver.findElements(By.css(selector));
+                const title = await driver.getTitle()
+                const testResultContext: iTagsTestResults = {
+                    title: "each page on site should have one title tag, and should contain content",
+                    value: {
+                        url: link,
+                        tagTested: selector,
+                        noOfTags: titleTags.length,
+                        tagValues: [title]
+                    }
+                }
+                addContext(this, testResultContext);
+                expect(titleTags, "No title tag").not.to.be.null;
+                expect(titleTags.length, "No title tag").to.be.greaterThan(0);
+                expect(titleTags.length, "Too many title tags").to.be.lessThan(2);
+                expect(title, "No title tag value").not.to.be.null;
+                expect(title.length, "No title tag value").to.be.greaterThan(0);
+            })
             it("should have one meta description tag, and should contain content", async function() {
                 const selector = 'meta[name="description"]';
                 await driver.get(link);
@@ -164,31 +185,6 @@ describe("SEO Test", () => {
                 expect(twitterImageTags.length, "Too many twitter:image tags").to.be.lessThan(2);
                 expect(values, "No twitter:image tag value").not.to.be.null;
                 expect(values.length, "No twitter:image tag value").to.be.greaterThan(0);
-            })
-            it("should have one title tag, and should contain content", async function() {
-                const selector = 'title';
-                await driver.get(link);
-                let titleTags: WebElement[] = await driver.findElements(By.css(selector));
-                let values: string[] = [];
-                for(let tag of titleTags) {
-                    let value = await tag.getText();
-                    value ? values.push(value) : null;
-                }
-                const testResultContext: iTagsTestResults = {
-                    title: "each page on site should have one title tag, and should contain content",
-                    value: {
-                        url: link,
-                        tagTested: selector,
-                        noOfTags: titleTags.length,
-                        tagValues: values
-                    }
-                }
-                addContext(this, testResultContext);
-                expect(titleTags, "No title tag").not.to.be.null;
-                expect(titleTags.length, "No title tag").to.be.greaterThan(0);
-                expect(titleTags.length, "Too many title tags").to.be.lessThan(2);
-                expect(values, "No title tag value").not.to.be.null;
-                expect(values.length, "No title tag value").to.be.greaterThan(0);
             })
         })
     }
