@@ -1,9 +1,10 @@
 import {driver, MochaCleanup, MochaSetup} from "../automated_test_setup/_global-setup";
 import {By, WebElement} from "selenium-webdriver";
-import {AddOgImageTagResults, AddOgTitleTagResults} from "../automated_test_modules/_add_results";
 import {expect} from 'chai';
 import fs from "fs";
 import path from "node:path";
+import {iImageAltTestResults, iImageOptimisationResults, iPNGTestResults} from "../automated_test_setup/_types";
+const addContext = require('mochawesome/addContext');
 
 let linksToTest = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'automated_test_setup', 'links_to_test.json'), 'utf8'));
 describe("Image Test", () => {
@@ -15,27 +16,31 @@ describe("Image Test", () => {
     })
     for (let link of linksToTest) {
         describe(link, () => {
-            it("each image on page should have an alt tag, even if empty", async () => {
+            it("each image on page should have an alt tag, even if empty", async function() {
+                const selector = 'img';
                 await driver.get(link);
-                let imgTags: WebElement[] = await driver.findElements(By.css('img'));
+                let imgTags: WebElement[] = await driver.findElements(By.css(selector));
                 let imagesWithoutAlt: string[] = [];
                 for(let img of imgTags) {
                     const imgSrc = await img.getAttribute('src');
                     const imgAlt = await img.getAttribute('alt');
                     imgAlt === null || imgAlt === undefined ? imagesWithoutAlt.push(imgSrc) : null;
                 }
-                // let pass = imgTags.length === 1 && imagesWithoutAlt.length > 0;
-                // AddOgTitleTagResults(link, pass, imgTags.length, imagesWithoutAlt);
-                // expect(imgTags, "No og:title tag").not.to.be.null;
-                // expect(imgTags.length, "No og:title tag").to.be.greaterThan(0);
-                // expect(imgTags.length, "Too many og:title tags").to.be.lessThan(2);
-                // expect(imagesWithoutAlt, "No og:title tag value").not.to.be.null;
-                // expect(imagesWithoutAlt.length, "No og:title tag value").to.be.greaterThan(0);
-                expect(imagesWithoutAlt.length, `The following images do not have an alt attribute - ${JSON.stringify(imagesWithoutAlt)}`).to.equal(0);
+                const testResultContext: iImageAltTestResults = {
+                    title: "The following images have no alt attribute",
+                    value: {
+                        url: link,
+                        noOfImagesWithoutAltTag: imagesWithoutAlt.length,
+                        imageUrls: imagesWithoutAlt
+                    }
+                }
+                addContext(this, testResultContext);
+                expect(imagesWithoutAlt.length, "There are images that have no alt attribute").to.equal(0);
             })
-            it("each PNG on page should contain transparency", async () => {
+            it("each PNG on page should contain transparency", async function() {
+                const selector = 'img[src$=".png"]';
                 await driver.get(link);
-                let pngImgTags: WebElement[] = await driver.findElements(By.css('img[src$=".png"]'));
+                let pngImgTags: WebElement[] = await driver.findElements(By.css(selector));
                 let imagesWithoutTransparency: string[] = [];
                 for(let img of pngImgTags) {
                     try {
@@ -60,18 +65,21 @@ describe("Image Test", () => {
                         console.error(err);
                     }
                 }
-                // let pass = imgTags.length === 1 && imagesWithoutAlt.length > 0;
-                // AddOgTitleTagResults(link, pass, imgTags.length, imagesWithoutAlt);
-                // expect(imgTags, "No og:title tag").not.to.be.null;
-                // expect(imgTags.length, "No og:title tag").to.be.greaterThan(0);
-                // expect(imgTags.length, "Too many og:title tags").to.be.lessThan(2);
-                // expect(imagesWithoutAlt, "No og:title tag value").not.to.be.null;
-                // expect(imagesWithoutAlt.length, "No og:title tag value").to.be.greaterThan(0);
-                expect(imagesWithoutTransparency.length, `The following images are PNG format but have no transparency - ${JSON.stringify(imagesWithoutTransparency)}`).to.equal(0);
+                const testResultContext: iPNGTestResults = {
+                    title: "The following PNGs do not contain transparency, and so can use a different image format",
+                    value: {
+                        url: link,
+                        noOfPngsWithoutTransparency: imagesWithoutTransparency.length,
+                        imageUrls: imagesWithoutTransparency
+                    }
+                }
+                addContext(this, testResultContext);
+                expect(imagesWithoutTransparency.length, "There are PNGs in use that do not contain transparency").to.equal(0);
             })
-            it("each image on page should be under 800kb", async () => {
+            it("each image on page should be under 800kb", async function() {
+                const selector = 'img';
                 await driver.get(link);
-                let imgTags: WebElement[] = await driver.findElements(By.css('img[src$=".png"]'));
+                let imgTags: WebElement[] = await driver.findElements(By.css(selector));
                 let imagesToOptimise: string[] = [];
                 for(let img of imgTags) {
                     try {
@@ -86,14 +94,16 @@ describe("Image Test", () => {
                         console.error(err);
                     }
                 }
-                // let pass = imgTags.length === 1 && imagesWithoutAlt.length > 0;
-                // AddOgTitleTagResults(link, pass, imgTags.length, imagesWithoutAlt);
-                // expect(imgTags, "No og:title tag").not.to.be.null;
-                // expect(imgTags.length, "No og:title tag").to.be.greaterThan(0);
-                // expect(imgTags.length, "Too many og:title tags").to.be.lessThan(2);
-                // expect(imagesWithoutAlt, "No og:title tag value").not.to.be.null;
-                // expect(imagesWithoutAlt.length, "No og:title tag value").to.be.greaterThan(0);
-                expect(imagesToOptimise.length, `The following images are over 800kb and may need optimisation - ${JSON.stringify(imagesToOptimise)}`).to.equal(0);
+                const testResultContext: iImageOptimisationResults = {
+                    title: "The following images are over 800kb in size, and may require optimisation",
+                    value: {
+                        url: link,
+                        noOfImagesRequiringOptimisation: imagesToOptimise.length,
+                        imageUrls: imagesToOptimise
+                    }
+                }
+                addContext(this, testResultContext);
+                expect(imagesToOptimise.length, "There are images that are over 800kb in size, and may require optimisation").to.equal(0);
             })
         })
     }

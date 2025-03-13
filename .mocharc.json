@@ -1,5 +1,14 @@
 {
   "$schema": "https://json.schemastore.org/mocharc.json",
   "require": "tsx",
-  "node-option": ["import=tsx"]
+  "node-option": ["import=tsx"],
+  "recursive": true,
+  "timeout": 0,
+  "reporter": "mochawesome",
+  "reporter-options": [
+    "reportDir=automated_test_results",
+    "reportFilename=test_results",
+    "consoleReporter=none",
+    "autoOpen=true"
+  ]
 }

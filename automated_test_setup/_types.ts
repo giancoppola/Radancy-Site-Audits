@@ -1,25 +1,42 @@
-export interface iTestResults {
-    [key: string]: iURLTestResults
+// All test result types must follow this basic outline
+// {
+//     title: string,
+//     value: any,
+// }
+
+export interface iTagsTestResults {
+    title: string,
+    value: {
+        url: string,
+        tagTested: string,
+        noOfTags: number,
+        tagValues: string[],
+    }
 }
-export interface iURLTestResults {
-    h1Tags: {
-        pass: boolean;
-        noOfTags: number;
-        tagValues: string[];
+
+export interface iPNGTestResults {
+    title: string,
+    value: {
+        url: string,
+        noOfPngsWithoutTransparency: number,
+        imageUrls: string[],
     }
-    metaDescriptionTag: {
-        pass: boolean;
-        noOfTags: number;
-        tagValues: string[];
+}
+
+export interface iImageAltTestResults {
+    title: string,
+    value: {
+        url: string,
+        noOfImagesWithoutAltTag: number,
+        imageUrls: string[],
     }
-    ogImageTag: {
-        pass: boolean;
-        noOfTags: number;
-        tagValues: string[];
-    }
-    ogTitleTag: {
-        pass: boolean;
-        noOfTags: number;
-        tagValues: string[];
+}
+
+export interface iImageOptimisationResults {
+    title: string,
+    value: {
+        url: string,
+        noOfImagesRequiringOptimisation: number,
+        imageUrls: string[],
     }
 }
