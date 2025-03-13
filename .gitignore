@@ -142,6 +142,7 @@ dist
 .svelte-kit
 
 # Testing
+automated_test_results
 links_to_test.json
 test_results.html
 test_results.json
