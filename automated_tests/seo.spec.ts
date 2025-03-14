@@ -4,7 +4,11 @@ import {expect} from 'chai';
 import fs from "fs";
 import path from "node:path";
 import addContext from "mochawesome/addContext";
-import {iImageOptimisationResults, iTagsTestResults} from "../automated_test_setup/_types";
+import {
+    iImageOptimisationResults,
+    iHasTagTestResults,
+    iHasTagAndContentLoadsTestResults
+} from "../automated_test_setup/_types";
 
 let linksToTest = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'automated_test_setup', 'links_to_test.json'), 'utf8'));
 describe("SEO Test", () => {
@@ -25,7 +29,7 @@ describe("SEO Test", () => {
                     let value = await h1Tag.getText();
                     value ? values.push(value) : null;
                 };
-                const testResultContext: iTagsTestResults = {
+                const testResultContext: iHasTagTestResults = {
                     title: "should have at least one H1 tag on each page, and should contain content",
                     value: {
                         url: link,
@@ -45,7 +49,7 @@ describe("SEO Test", () => {
                 await driver.get(link);
                 const titleTags: WebElement[] = await driver.findElements(By.css(selector));
                 const title = await driver.getTitle()
-                const testResultContext: iTagsTestResults = {
+                const testResultContext: iHasTagTestResults = {
                     title: "each page on site should have one title tag, and should contain content",
                     value: {
                         url: link,
@@ -70,7 +74,7 @@ describe("SEO Test", () => {
                     let value = await tag.getAttribute("content");
                     value ? values.push(value) : null;
                 }
-                const testResultContext: iTagsTestResults = {
+                const testResultContext: iHasTagTestResults = {
                     title: "should have one meta description tag on each page, and should contain content",
                     value: {
                         url: link,
@@ -86,22 +90,28 @@ describe("SEO Test", () => {
                 expect(values, "No meta description tag value").not.to.be.null;
                 expect(values.length, "No meta description tag value").to.be.greaterThan(0);
             })
-            it("should have one og:image tag, and should contain content", async function() {
+            it("should have one og:image tag, containing an image that should load properly", async function() {
                 const selector = 'meta[property="og:image"]';
                 await driver.get(link);
+                let contentLoads = false;
                 let ogImageTags: WebElement[] = await driver.findElements(By.css(selector));
                 let values: string[] = [];
                 for(let tag of ogImageTags) {
                     let value = await tag.getAttribute("content");
                     value ? values.push(value) : null;
                 }
-                const testResultContext: iTagsTestResults = {
-                    title: "each page on site should have one og:image tag, and should contain content",
+                for(let url of values) {
+                    const response = await fetch(url);
+                    contentLoads = response.ok;
+                }
+                const testResultContext: iHasTagAndContentLoadsTestResults = {
+                    title: "should have one og:image tag, containing an image that should load properly",
                     value: {
                         url: link,
                         tagTested: selector,
                         noOfTags: ogImageTags.length,
-                        tagValues: values
+                        tagValues: values,
+                        contentLoads: contentLoads
                     }
                 }
                 addContext(this, testResultContext);
@@ -110,6 +120,7 @@ describe("SEO Test", () => {
                 expect(ogImageTags.length, "Too many og:image tags").to.be.lessThan(2);
                 expect(values, "No og:image tag value").not.to.be.null;
                 expect(values.length, "No og:image tag value").to.be.greaterThan(0);
+                expect(contentLoads, "Image does not load properly").to.be.true;
             })
             it("should have one og:title tag, and should contain content", async function() {
                 const selector = 'meta[property="og:title"]';
@@ -120,7 +131,7 @@ describe("SEO Test", () => {
                     let value = await tag.getAttribute("content");
                     value ? values.push(value) : null;
                 }
-                const testResultContext: iTagsTestResults = {
+                const testResultContext: iHasTagTestResults = {
                     title: "each page on site should have one og:title tag, and should contain content",
                     value: {
                         url: link,
@@ -145,7 +156,7 @@ describe("SEO Test", () => {
                     let value = await tag.getAttribute("content");
                     value ? values.push(value) : null;
                 }
-                const testResultContext: iTagsTestResults = {
+                const testResultContext: iHasTagTestResults = {
                     title: "each page on site should have one twitter:title tag, and should contain content",
                     value: {
                         url: link,
@@ -161,22 +172,28 @@ describe("SEO Test", () => {
                 expect(values, "No twitter:title tag value").not.to.be.null;
                 expect(values.length, "No twitter:title tag value").to.be.greaterThan(0);
             })
-            it("should have one twitter:image tag, and should contain content", async function() {
+            it("should have one twitter:image tag, containing an image that should load properly", async function() {
                 const selector = 'meta[name="twitter:image"]';
                 await driver.get(link);
+                let contentLoads = false;
                 let twitterImageTags: WebElement[] = await driver.findElements(By.css(selector));
                 let values: string[] = [];
                 for(let tag of twitterImageTags) {
                     let value = await tag.getAttribute("content");
                     value ? values.push(value) : null;
                 }
-                const testResultContext: iTagsTestResults = {
+                for(let url of values) {
+                    const response = await fetch(url);
+                    contentLoads = response.ok;
+                }
+                const testResultContext: iHasTagAndContentLoadsTestResults = {
                     title: "each page on site should have one twitter:image tag, and should contain content",
                     value: {
                         url: link,
                         tagTested: selector,
                         noOfTags: twitterImageTags.length,
-                        tagValues: values
+                        tagValues: values,
+                        contentLoads: contentLoads
                     }
                 }
                 addContext(this, testResultContext);
@@ -185,6 +202,38 @@ describe("SEO Test", () => {
                 expect(twitterImageTags.length, "Too many twitter:image tags").to.be.lessThan(2);
                 expect(values, "No twitter:image tag value").not.to.be.null;
                 expect(values.length, "No twitter:image tag value").to.be.greaterThan(0);
+            })
+            it("should have one favicon tag, containing an image that should load properly", async function() {
+                const selector = 'link[rel*="icon"]';
+                await driver.get(link);
+                let contentLoads = false;
+                let faviconTags: WebElement[] = await driver.findElements(By.css(selector));
+                let values: string[] = [];
+                for(let tag of faviconTags) {
+                    let value = await tag.getAttribute("href");
+                    value ? values.push(value) : null;
+                }
+                for(let href of values) {
+                    const response = await fetch(href);
+                    contentLoads = response.ok;
+                }
+                const testResultContext: iHasTagAndContentLoadsTestResults = {
+                    title: "should have one favicon tag, containing an image that should load properly",
+                    value: {
+                        url: link,
+                        tagTested: selector,
+                        noOfTags: faviconTags.length,
+                        tagValues: values,
+                        contentLoads: contentLoads
+                    }
+                }
+                addContext(this, testResultContext);
+                expect(faviconTags, "No favicon tag").not.to.be.null;
+                expect(faviconTags.length, "No favicon tag").to.be.greaterThan(0);
+                expect(faviconTags.length, "Too many favicon tags").to.be.lessThan(2);
+                expect(values, "No favicon tag value").not.to.be.null;
+                expect(values.length, "No favicon tag value").to.be.greaterThan(0);
+                expect(contentLoads, "Favicon image does not load").to.be.true;
             })
         })
     }

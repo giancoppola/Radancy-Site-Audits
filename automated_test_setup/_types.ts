@@ -4,13 +4,24 @@
 //     value: any,
 // }
 
-export interface iTagsTestResults {
+export interface iHasTagTestResults {
     title: string,
     value: {
         url: string,
         tagTested: string,
         noOfTags: number,
         tagValues: string[],
+    }
+}
+
+export interface iHasTagAndContentLoadsTestResults {
+    title: string,
+    value: {
+        url: string,
+        tagTested: string,
+        noOfTags: number,
+        tagValues: string[],
+        contentLoads: boolean,
     }
 }
 
