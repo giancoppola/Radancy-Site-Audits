@@ -40,3 +40,12 @@ export interface iImageOptimisationResults {
         imageUrls: string[],
     }
 }
+
+export interface iDoesElementExistTestResults {
+    title: string,
+    value: {
+        url: string,
+        selectorTested: string,
+        doesElementExist: boolean,
+    }
+}

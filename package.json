@@ -4,7 +4,10 @@
   "description": "Automating Radancy site audits",
   "main": "manual_tests/console_tests.js",
   "scripts": {
-    "test": "ts-node automated_test_setup/_pre-test-setup.ts && mocha automated_tests/**/*.spec.ts"
+    "test": "ts-node automated_test_setup/_pre-test-setup.ts && mocha automated_tests/**/*.spec.ts",
+    "test_seo": "ts-node automated_test_setup/_pre-test-setup.ts && mocha automated_tests/seo.spec.ts",
+    "test_images": "ts-node automated_test_setup/_pre-test-setup.ts && mocha automated_tests/images.spec.ts",
+    "test_product": "ts-node automated_test_setup/_pre-test-setup.ts && mocha automated_tests/product.spec.ts"
   },
   "private": true,
   "dependencies": {
