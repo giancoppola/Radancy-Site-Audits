@@ -5,5 +5,6 @@
   * Run "npm run test_images" to run all image tests
   * Run "npm run test_seo" to run all seo tests
   * Run "npm run test_product" to run all product tests
+  * Run "npm run test_performance" to run all performance tests
 * Results will be available as a web page at /automated_test_results/test_results.html,
   along with a JSON containing more details in /automated_test_results/test_results.json

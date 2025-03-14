@@ -60,3 +60,11 @@ export interface iDoesElementExistTestResults {
         doesElementExist: boolean,
     }
 }
+
+export interface iPageLoadSpeedTestResults {
+    title: string,
+    value: {
+        url: string,
+        loadTime: number
+    }
+}

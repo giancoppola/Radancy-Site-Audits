@@ -8,7 +8,7 @@ import {
     iImageAltTestResults,
     iImageOptimisationResults,
     iPNGTestResults,
-    iHasTagTestResults
+    iHasTagTestResults, iHasTagAndContentLoadsTestResults, iPageLoadSpeedTestResults
 } from "../automated_test_setup/_types";
 import {websiteToTest} from "../automated_test_setup/_test-parameters";
 import {NoSuchElementError} from "selenium-webdriver/lib/error";
