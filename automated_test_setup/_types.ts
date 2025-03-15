@@ -52,6 +52,15 @@ export interface iImageOptimisationResults {
     }
 }
 
+export interface iImageLoadTestResults {
+    title: string,
+    value: {
+        url: string,
+        noOfImagesNotLoading: number,
+        imageUrls: string[],
+    }
+}
+
 export interface iDoesElementExistTestResults {
     title: string,
     value: {

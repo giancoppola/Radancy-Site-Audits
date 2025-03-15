@@ -101,8 +101,7 @@ describe("SEO Test", () => {
                     value ? values.push(value) : null;
                 }
                 for(let url of values) {
-                    const response = await fetch(url);
-                    contentLoads = response.ok;
+                    contentLoads = await DoesResourceLoad(url);
                 }
                 const testResultContext: iHasTagAndContentLoadsTestResults = {
                     title: "should have one og:image tag, containing an image that should load properly",
@@ -183,8 +182,7 @@ describe("SEO Test", () => {
                     value ? values.push(value) : null;
                 }
                 for(let url of values) {
-                    const response = await fetch(url);
-                    contentLoads = response.ok;
+                    contentLoads = await DoesResourceLoad(url);
                 }
                 const testResultContext: iHasTagAndContentLoadsTestResults = {
                     title: "each page on site should have one twitter:image tag, and should contain content",
@@ -213,9 +211,8 @@ describe("SEO Test", () => {
                     let value = await tag.getAttribute("href");
                     value ? values.push(value) : null;
                 }
-                for(let href of values) {
-                    const response = await fetch(href);
-                    contentLoads = response.ok;
+                for(let url of values) {
+                    contentLoads = await DoesResourceLoad(url);
                 }
                 const testResultContext: iHasTagAndContentLoadsTestResults = {
                     title: "should have one favicon tag, containing an image that should load properly",
