@@ -9,6 +9,7 @@ import {
     iHasTagTestResults,
     iHasTagAndContentLoadsTestResults
 } from "../automated_test_setup/_types";
+import {DoesResourceLoad} from "../automated_test_modules/_fetch_helpers";
 
 let linksToTest = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'automated_test_setup', 'links_to_test.json'), 'utf8'));
 describe("SEO Test", () => {
