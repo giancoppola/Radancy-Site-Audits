@@ -1,4 +1,4 @@
-const DoesResourceLoad = async (url: string) :Promise<boolean> => {
+export const DoesResourceLoad = async (url: string) :Promise<boolean> => {
     try {
         const response = await fetch(url);
         return response.ok
@@ -9,7 +9,7 @@ const DoesResourceLoad = async (url: string) :Promise<boolean> => {
     }
 }
 
-const GetArrayBuffer = async (url: string) :Promise<ArrayBuffer> => {
+export const GetArrayBuffer = async (url: string) :Promise<ArrayBuffer> => {
     const response = await fetch(url);
     return await response.arrayBuffer();
 }

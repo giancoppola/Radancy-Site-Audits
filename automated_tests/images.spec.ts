@@ -9,6 +9,7 @@ import {
     iImageOptimisationResults,
     iPNGTestResults
 } from "../automated_test_setup/_types";
+import {DoesResourceLoad, GetArrayBuffer} from "../automated_test_modules/_fetch_helpers";
 const addContext = require('mochawesome/addContext');
 
 let linksToTest = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'automated_test_setup', 'links_to_test.json'), 'utf8'));
