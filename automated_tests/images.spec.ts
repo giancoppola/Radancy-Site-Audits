@@ -3,13 +3,9 @@ import {By, WebElement} from "selenium-webdriver";
 import {expect} from 'chai';
 import fs from "fs";
 import path from "node:path";
-import {
-    iImageAltTestResults,
-    iImageLoadTestResults,
-    iImageOptimisationResults,
-    iPNGTestResults
-} from "../automated_test_setup/_types";
+import { iImageTestResults } from "../automated_test_setup/_types";
 import {DoesResourceLoad, GetArrayBuffer} from "../automated_test_modules/_fetch_helpers";
+import {ImageSizeInKbFromDimensions} from "../automated_test_modules/_tools";
 const addContext = require('mochawesome/addContext');
 
 let linksToTest = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'automated_test_setup', 'links_to_test.json'), 'utf8'));
@@ -32,11 +28,12 @@ describe("Image Test", () => {
                     const doesElementLoad = await DoesResourceLoad(imgSrc);
                     !doesElementLoad ? imagesNotLoading.push(imgSrc) : null;
                 }
-                const testResultContext: iImageLoadTestResults = {
+                imagesNotLoading = [...new Set(imagesNotLoading)];
+                const testResultContext: iImageTestResults = {
                     title: "The following images do not load correctly",
                     value: {
                         url: link,
-                        noOfImagesNotLoading: imagesNotLoading.length,
+                        noOfFailures: imagesNotLoading.length,
                         imageUrls: imagesNotLoading
                     }
                 }
@@ -53,16 +50,46 @@ describe("Image Test", () => {
                     const imgAlt = await img.getAttribute('alt');
                     imgAlt === null || imgAlt === undefined ? imagesWithoutAlt.push(imgSrc) : null;
                 }
-                const testResultContext: iImageAltTestResults = {
+                imagesWithoutAlt = [...new Set(imagesWithoutAlt)];
+                const testResultContext: iImageTestResults = {
                     title: "The following images have no alt attribute",
                     value: {
                         url: link,
-                        noOfImagesWithoutAltTag: imagesWithoutAlt.length,
+                        noOfFailures: imagesWithoutAlt.length,
                         imageUrls: imagesWithoutAlt
                     }
                 }
                 addContext(this, testResultContext);
                 expect(imagesWithoutAlt.length, "There are images that have no alt attribute").to.equal(0);
+            })
+            it("each image should not be larger than they are rendered on page", async function() {
+                const selector = 'img';
+                await driver.get(link);
+                let imgTags: WebElement[] = await driver.findElements(By.css(selector));
+                let imagesLargerThanRendered: string[] = [];
+                for(let img of imgTags) {
+                    const imgSrc = await img.getAttribute('src');
+                    const imgBitDepth = imgSrc.endsWith("gif") ? 8 : 24;
+                    const imgSize = await img.getRect();
+                    const naturalWidth = await img.getAttribute('naturalWidth');
+                    const naturalHeight = await img.getAttribute('naturalHeight');
+                    // 4kb buffer same as with Google's lighthouse testing
+                    const sizeBufferInKb = 4;
+                    const naturalSize = ImageSizeInKbFromDimensions(parseInt(naturalWidth), parseInt(naturalHeight), imgBitDepth);
+                    const renderedSize = ImageSizeInKbFromDimensions(imgSize.width, imgSize.height, imgBitDepth) + sizeBufferInKb;
+                    naturalSize > renderedSize ? imagesLargerThanRendered.push(imgSrc) : null;
+                }
+                imagesLargerThanRendered = [...new Set(imagesLargerThanRendered)];
+                const testResultContext: iImageTestResults = {
+                    title: "The following images do not load correctly",
+                    value: {
+                        url: link,
+                        noOfFailures: imagesLargerThanRendered.length,
+                        imageUrls: imagesLargerThanRendered
+                    }
+                }
+                addContext(this, testResultContext);
+                expect(imagesLargerThanRendered.length, "There are images that do not load properly").to.equal(0);
             })
             it("each PNG on page should contain transparency", async function() {
                 const selector = 'img[src$=".png"]';
@@ -91,11 +118,12 @@ describe("Image Test", () => {
                         console.error(err);
                     }
                 }
-                const testResultContext: iPNGTestResults = {
+                imagesWithoutTransparency = [...new Set(imagesWithoutTransparency)];
+                const testResultContext: iImageTestResults = {
                     title: "The following PNGs do not contain transparency, and so can use a different image format",
                     value: {
                         url: link,
-                        noOfPngsWithoutTransparency: imagesWithoutTransparency.length,
+                        noOfFailures: imagesWithoutTransparency.length,
                         imageUrls: imagesWithoutTransparency
                     }
                 }
@@ -120,11 +148,12 @@ describe("Image Test", () => {
                         console.error(err);
                     }
                 }
-                const testResultContext: iImageOptimisationResults = {
+                imagesToOptimise = [...new Set(imagesToOptimise)];
+                const testResultContext: iImageTestResults = {
                     title: "The following images are over 800kb in size, and may require optimisation",
                     value: {
                         url: link,
-                        noOfImagesRequiringOptimisation: imagesToOptimise.length,
+                        noOfFailures: imagesToOptimise.length,
                         imageUrls: imagesToOptimise
                     }
                 }

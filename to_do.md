@@ -1,6 +1,6 @@
 # To Do
 
-* Explore BugHerd API for adding tasks - https://www.bugherd.com/api_v2#api_task_create
+* Explore BugHerd API for adding tasks with screenshots using .takeScreenshot() - https://www.bugherd.com/api_v2#api_task_create
 * All images are not natively larger than the largest size they will be rendered within the site layout
 * A Sitemap page is present
 * Assure that GST language picker works as expected (going from one page in one language to the same page in another language)

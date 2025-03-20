@@ -25,38 +25,11 @@ export interface iHasTagAndContentLoadsTestResults {
     }
 }
 
-export interface iPNGTestResults {
+export interface iImageTestResults {
     title: string,
     value: {
         url: string,
-        noOfPngsWithoutTransparency: number,
-        imageUrls: string[],
-    }
-}
-
-export interface iImageAltTestResults {
-    title: string,
-    value: {
-        url: string,
-        noOfImagesWithoutAltTag: number,
-        imageUrls: string[],
-    }
-}
-
-export interface iImageOptimisationResults {
-    title: string,
-    value: {
-        url: string,
-        noOfImagesRequiringOptimisation: number,
-        imageUrls: string[],
-    }
-}
-
-export interface iImageLoadTestResults {
-    title: string,
-    value: {
-        url: string,
-        noOfImagesNotLoading: number,
+        noOfFailures: number,
         imageUrls: string[],
     }
 }
