@@ -77,11 +77,13 @@ describe("Image Test", () => {
                     const sizeBufferInKb = 4;
                     const naturalSize = ImageSizeInKbFromDimensions(parseInt(naturalWidth), parseInt(naturalHeight), imgBitDepth);
                     const renderedSize = ImageSizeInKbFromDimensions(imgSize.width, imgSize.height, imgBitDepth) + sizeBufferInKb;
+                    console.log(naturalSize);
+                    console.log(renderedSize);
                     naturalSize > renderedSize ? imagesLargerThanRendered.push(imgSrc) : null;
                 }
                 imagesLargerThanRendered = [...new Set(imagesLargerThanRendered)];
                 const testResultContext: iImageTestResults = {
-                    title: "The following images do not load correctly",
+                    title: "The following images are larger than they are rendered on page",
                     value: {
                         url: link,
                         noOfFailures: imagesLargerThanRendered.length,
@@ -89,7 +91,7 @@ describe("Image Test", () => {
                     }
                 }
                 addContext(this, testResultContext);
-                expect(imagesLargerThanRendered.length, "There are images that do not load properly").to.equal(0);
+                expect(imagesLargerThanRendered.length, "The following images are larger than they are rendered on page").to.equal(0);
             })
             it("each PNG on page should contain transparency", async function() {
                 const selector = 'img[src$=".png"]';
