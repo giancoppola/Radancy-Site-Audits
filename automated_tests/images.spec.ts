@@ -5,7 +5,7 @@ import fs from "fs";
 import path from "node:path";
 import { iImageTestResults } from "../automated_test_setup/_types";
 import {DoesResourceLoad, GetArrayBuffer} from "../automated_test_modules/_fetch_helpers";
-import {ImageSizeInKbFromDimensions} from "../automated_test_modules/_tools";
+import {ImageSizeInKiBFromDimensions, IsPngJpgWebpOrGif} from "../automated_test_modules/_tools";
 const addContext = require('mochawesome/addContext');
 
 let linksToTest = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'automated_test_setup', 'links_to_test.json'), 'utf8'));
@@ -63,23 +63,36 @@ describe("Image Test", () => {
                 expect(imagesWithoutAlt.length, "There are images that have no alt attribute").to.equal(0);
             })
             it("each image should not be larger than they are rendered on page", async function() {
+                // Based on the lighthouse "Properly size images" test
+                // https://github.com/GoogleChrome/lighthouse/blob/a1dfe6c5d85e300d53538ac1bf607b99da12989f/lighthouse-core/audits/byte-efficiency/uses-responsive-images.js#L128-L137
                 const selector = 'img';
                 await driver.get(link);
                 let imgTags: WebElement[] = await driver.findElements(By.css(selector));
                 let imagesLargerThanRendered: string[] = [];
+                let testThisImage = true;
                 for(let img of imgTags) {
+                    testThisImage = true;
                     const imgSrc = await img.getAttribute('src');
-                    const imgBitDepth = imgSrc.endsWith("gif") ? 8 : 24;
-                    const imgSize = await img.getRect();
-                    const naturalWidth = await img.getAttribute('naturalWidth');
-                    const naturalHeight = await img.getAttribute('naturalHeight');
-                    // 4kb buffer same as with Google's lighthouse testing
-                    const sizeBufferInKb = 4;
-                    const naturalSize = ImageSizeInKbFromDimensions(parseInt(naturalWidth), parseInt(naturalHeight), imgBitDepth);
-                    const renderedSize = ImageSizeInKbFromDimensions(imgSize.width, imgSize.height, imgBitDepth) + sizeBufferInKb;
-                    console.log(naturalSize);
-                    console.log(renderedSize);
-                    naturalSize > renderedSize ? imagesLargerThanRendered.push(imgSrc) : null;
+                    if (IsPngJpgWebpOrGif(imgSrc)) {
+                        const imgBitDepth = imgSrc.endsWith("gif") ? 8 : 24;
+                        const imgSize = await img.getRect();
+                        const naturalWidth = await img.getAttribute('naturalWidth');
+                        const naturalHeight = await img.getAttribute('naturalHeight');
+                        if (!naturalHeight || !naturalWidth) { testThisImage = false; }
+                        // 4kb buffer same as with Google's lighthouse testing
+                        const sizeBufferInKiB = 4;
+                        const naturalSize = ImageSizeInKiBFromDimensions(parseInt(naturalWidth), parseInt(naturalHeight), imgBitDepth);
+                        const renderedSize = ImageSizeInKiBFromDimensions(imgSize.width, imgSize.height, imgBitDepth);
+                        console.log("Image: ", imgSrc);
+                        console.log("Natural Size: ", naturalSize);
+                        console.log("Rendered Size: ", renderedSize);
+                        console.log("Pass: ", (naturalSize - sizeBufferInKiB) < renderedSize);
+                        if (naturalSize < sizeBufferInKiB || renderedSize < sizeBufferInKiB) { testThisImage = false; }
+                        if (testThisImage) {
+                            // If the rendered size is at least 4KiB smaller than the actual size, then the image fails the audit.
+                            (naturalSize - sizeBufferInKiB) >= renderedSize ? imagesLargerThanRendered.push(imgSrc) : null;
+                        }
+                    }
                 }
                 imagesLargerThanRendered = [...new Set(imagesLargerThanRendered)];
                 const testResultContext: iImageTestResults = {
