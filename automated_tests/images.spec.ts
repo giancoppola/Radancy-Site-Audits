@@ -76,6 +76,7 @@ describe("Image Test", () => {
                     if (IsPngJpgWebpOrGif(imgSrc)) {
                         const imgBitDepth = imgSrc.endsWith("gif") ? 8 : 24;
                         const imgSize = await img.getRect();
+                        const devicePixelRatio: number = await driver.executeScript("return window.devicePixelRatio");
                         const naturalWidth = await img.getAttribute('naturalWidth');
                         const naturalHeight = await img.getAttribute('naturalHeight');
                         if (!naturalHeight || !naturalWidth) { testThisImage = false; }

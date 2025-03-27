@@ -2,18 +2,27 @@
 // Image Tools //
 /////////////////
 
-export const GetDisplayedDimensions = (image, ViewportDimensions) => {
-    if (image.displayedWidth && image.displayedHeight) {
+import {WebElement} from "selenium-webdriver";
+
+export interface iViewportDimensions {
+    innerWidth: number;
+    innerHeight: number;
+    devicePixelRatio: number;
+}
+
+export const GetDisplayedDimensions = async (image: WebElement, viewportDimensions: iViewportDimensions): Promise<{ width: number, height: number }> => {
+    const renderedSize = await image.getRect();
+    if (renderedSize.width && renderedSize.height) {
         return {
-            width: image.displayedWidth * ViewportDimensions.devicePixelRatio,
-            height: image.displayedHeight * ViewportDimensions.devicePixelRatio,
+            width: image.displayedWidth * viewportDimensions.devicePixelRatio,
+            height: image.displayedHeight * viewportDimensions.devicePixelRatio,
         };
     }
 
     // If the image has 0 dimensions, it's probably hidden/offscreen, so we'll be as forgiving as possible
     // and assume it's the size of two viewports. See https://github.com/GoogleChrome/lighthouse/issues/7236
-    const viewportWidth = ViewportDimensions.innerWidth;
-    const viewportHeight = ViewportDimensions.innerHeight * 2;
+    const viewportWidth = viewportDimensions.innerWidth;
+    const viewportHeight = viewportDimensions.innerHeight * 2;
     const imageAspectRatio = image.naturalWidth / image.naturalHeight;
     const viewportAspectRatio = viewportWidth / viewportHeight;
     let usedViewportWidth = viewportWidth;
@@ -25,8 +34,8 @@ export const GetDisplayedDimensions = (image, ViewportDimensions) => {
     }
 
     return {
-        width: usedViewportWidth * ViewportDimensions.devicePixelRatio,
-        height: usedViewportHeight * ViewportDimensions.devicePixelRatio,
+        width: usedViewportWidth * viewportDimensions.devicePixelRatio,
+        height: usedViewportHeight * viewportDimensions.devicePixelRatio,
     };
 }
 
