@@ -1,17 +1,8 @@
 import {driver, MochaCleanup, MochaSetup} from "../automated_test_setup/_global-setup";
-import {By, WebElement} from "selenium-webdriver";
 import {expect} from 'chai';
 import fs from "fs";
 import path from "node:path";
-import {
-    iDoesElementExistTestResults,
-    iImageAltTestResults,
-    iImageOptimisationResults,
-    iPNGTestResults,
-    iHasTagTestResults, iHasTagAndContentLoadsTestResults, iPageLoadSpeedTestResults
-} from "../automated_test_setup/_types";
-import {websiteToTest} from "../automated_test_setup/_test-parameters";
-import {NoSuchElementError} from "selenium-webdriver/lib/error";
+import { iPageLoadSpeedTestResults } from "../automated_test_setup/_types";
 const addContext = require('mochawesome/addContext');
 
 let linksToTest = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'automated_test_setup', 'links_to_test.json'), 'utf8'));
