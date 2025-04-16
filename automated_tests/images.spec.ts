@@ -5,7 +5,7 @@ import fs from "fs";
 import path from "node:path";
 import { iImageTestResults } from "../automated_test_setup/_types";
 import {DoesResourceLoad, GetArrayBuffer} from "../automated_test_modules/_fetch_helpers";
-import {ImageSizeInKiBFromDimensions, IsPngJpgWebpOrGif} from "../automated_test_modules/_tools";
+import {ImageSizeInKiBFromDimensions, ImgHasTransparency, IsPngJpgWebpOrGif} from "../automated_test_modules/_tools";
 const addContext = require('mochawesome/addContext');
 
 let linksToTest = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'automated_test_setup', 'links_to_test.json'), 'utf8'));
@@ -115,20 +115,8 @@ describe("Image Test", () => {
                 for(let img of pngImgTags) {
                     try {
                         const imgSrc = await img.getAttribute('src');
-                        const imgBuffer = await GetArrayBuffer(imgSrc);
-                        // following code based on https://stackoverflow.com/questions/41287823/check-image-transparency
-                        const view = new DataView(imgBuffer);
-                        // check if image is actually a PNG
-                        if (view.getUint32(0) === 0x89504E47 && view.getUint32(4) === 0x0D0A1A0A) {
-                            // We know format field exists in the IHDR chunk. The chunk exists at
-                            // offset 8 +8 bytes (size, name) +8 (depth) & +9 (type)
-                            const depth = view.getUint8(8 + 8 + 8);
-                            const typeIndex  = view.getUint8(8 + 8 + 9);
-                            const type = ["G", "", "RGB", "Indexed", "GA", "", "RGBA"][typeIndex];
-                            const buffer = view.buffer;
-                            const hasAlpha = typeIndex === 4 || typeIndex === 6  // grayscale + alpha or RGB + alpha
-                            !hasAlpha ? imagesWithoutTransparency.push(imgSrc) : null;
-                        }
+                        const hasTransparency: boolean = await ImgHasTransparency(imgSrc);
+                        !hasTransparency ? imagesWithoutTransparency.push(imgSrc) : null;
                     }
                     catch(err) {
                         console.error(err);

@@ -21,6 +21,22 @@
             </SchemaInfo>
           </value>
         </entry>
+        <entry key="Prettier">
+          <value>
+            <SchemaInfo>
+              <option name="name" value="Prettier" />
+              <option name="relativePathToSchema" value="http://json.schemastore.org/prettierrc" />
+              <option name="applicationDefined" value="true" />
+              <option name="patterns">
+                <list>
+                  <Item>
+                    <option name="path" value="automated_test_setup/links_to_test.json" />
+                  </Item>
+                </list>
+              </option>
+            </SchemaInfo>
+          </value>
+        </entry>
       </map>
     </state>
   </component>

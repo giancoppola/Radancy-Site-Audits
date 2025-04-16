@@ -6,7 +6,7 @@ import { iPageLoadSpeedTestResults } from "../automated_test_setup/_types";
 const addContext = require('mochawesome/addContext');
 
 let linksToTest = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'automated_test_setup', 'links_to_test.json'), 'utf8'));
-describe("Product Test", () => {
+describe("Performance Test", () => {
     before(async () => {
         await MochaSetup();
     })
